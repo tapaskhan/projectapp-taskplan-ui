@@ -1,0 +1,63 @@
+<form class="example-form" [formGroup]="addUserForm" (ngSubmit)="onSubmit()" #form="ngForm">
+    <div class="col-12">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput placeholder="First Name" formControlName="firstName">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        <mat-error *ngIf="submitted && formRef.firstName?.errors?.required">
+          Please Fill in the field.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-12">
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput placeholder="Last Name" formControlName="lastName">
+        <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+        <mat-error *ngIf="submitted && formRef.lastName?.errors?.required">
+          Please Fill in the field.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-12">
+        <mat-form-field appearance="outline">
+          <mat-label>Employee ID</mat-label>
+          <input matInput placeholder="Employee ID" formControlName="empid">
+          <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+          <mat-error *ngIf="submitted && formRef.empid?.errors?.required">
+            Please Fill in the field.
+          </mat-error>
+          <mat-error *ngIf="submitted && formRef.empid?.errors?.pattern">
+            Please Fill only numeric values
+          </mat-error>
+        </mat-form-field>
+    </div>
+    <div class="col-12">
+      <button mat-raised-button color="primary">
+        <ng-container *ngIf="!inEditMode">Submit</ng-container><ng-container *ngIf="inEditMode">Update</ng-container>
+      </button>
+      <button type="button" mat-raised-button color="secondary" (click)="resetForm()">Reset</button>
+    </div>
+  </form>
+  <hr>
+  <div class="col-12 pt-5">
+    <table matSort (matSortChange)="sortData($event)">
+      <tr>
+        <th mat-sort-header="firstName">First Name</th>
+        <th mat-sort-header="lastName">Last Name</th>
+        <th mat-sort-header="employeeId">Employee Id</th>
+        <th>Actions</th>
+      </tr>
+
+      <tr *ngFor="let user of sortedData;let i = index;">
+        <td>{{user.firstName}}</td>
+        <td>{{user.lastName}}</td>
+        <td>{{user.employeeId}}</td>
+        <td>
+          <button mat-icon-button (click)="editUser(i)">
+            <i class="fas fa-edit"></i>
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>

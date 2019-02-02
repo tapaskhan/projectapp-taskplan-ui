@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+*:focus {
+  outline: none !important;
+}
+.mat-form-field,table.mat-table{
+  width: 100%;
+}
+.mat-tab-body-wrapper {
+  padding: 50px 20px;
+}
+.mat-slider-horizontal,table {
+  width: 100%;
+}
+body .mat-dialog-container .mat-radio-button {
+  padding: 0 25px;
+  display: block;
+}
+.mat-list-base .mat-subheader {
+  color: black;
+  text-align: center;
+}
+

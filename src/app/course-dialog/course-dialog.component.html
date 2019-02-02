@@ -1,0 +1,75 @@
+<ng-container *ngIf="display_data?.typeOfSearch=='Search Manager'">
+  <mat-list>
+    <h3 mat-subheader>Search Manager</h3>
+    <div class="col-12">
+      <mat-form-field appearance="outline">
+        <mat-label>Search Manager</mat-label>
+        <input matInput placeholder="First Name" (keyup)="filterData($event)">
+        <mat-icon matSuffix><i class="fas fa-search"></i></mat-icon>
+      </mat-form-field>
+    </div>
+    <mat-radio-group class="example-radio-group" [(ngModel)]="selectedUser">
+      <mat-radio-button class="example-radio-button" *ngFor="let eachUser of dataToPopulate" [value]="eachUser?.id">
+          <mat-list-item>
+            {{eachUser.firstName}} {{eachUser.lastName}}
+          </mat-list-item>
+      </mat-radio-button>
+    </mat-radio-group>
+  </mat-list>
+  <div class="d-flex">
+      <button mat-raised-button color="primary" (click)="applyManager()">Apply</button>
+  </div>
+</ng-container>
+<ng-container *ngIf="display_data?.typeOfSearch=='Search Projects'">
+    <mat-list>
+      <h3 mat-subheader>Search Projects</h3>
+      <div class="col-12">
+        <mat-form-field appearance="outline">
+          <mat-label>Search Manager</mat-label>
+          <input matInput placeholder="First Name" (keyup)="filterData($event)">
+          <mat-icon matSuffix><i class="fas fa-search"></i></mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="max100">
+        <mat-radio-group class="example-radio-group" [(ngModel)]="selectedUser">
+          <mat-radio-button class="example-radio-button" *ngFor="let eachUser of dataToPopulate" [value]="eachUser?.id">
+              <mat-list-item>
+                {{eachUser.projectDesc}}
+              </mat-list-item>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </mat-list>
+    <div class="d-flex">
+      <div class="col-12 pt-3">
+        <button mat-raised-button color="primary" (click)="applyProject()">Apply</button>
+      </div>
+    </div>
+</ng-container>
+<ng-container *ngIf="display_data?.typeOfSearch=='Search Parent Task'">
+    <mat-list>
+      <h3 mat-subheader>Search Task</h3>
+      <div class="col-12">
+        <mat-form-field appearance="outline">
+          <mat-label>Search Task</mat-label>
+          <input matInput placeholder="First Name" (keyup)="filterData($event)">
+          <mat-icon matSuffix><i class="fas fa-search"></i></mat-icon>
+        </mat-form-field>
+      </div>
+      <div class="max100">
+        <mat-radio-group class="example-radio-group" [(ngModel)]="selectedUser">
+          <mat-radio-button class="example-radio-button" *ngFor="let eachUser of dataToPopulate" [value]="eachUser?.id">
+              <mat-list-item>
+                {{eachUser.parentTaskDec}}
+              </mat-list-item>
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </mat-list>
+    <div class="d-flex">
+      <div class="col-12 pt-3">
+        <button mat-raised-button color="primary" (click)="applyParentTask()">Apply</button>
+      </div>
+    </div>
+</ng-container>
+

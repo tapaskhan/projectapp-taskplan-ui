@@ -1,0 +1,22 @@
+<mat-toolbar>
+  <span>My Application</span>
+</mat-toolbar>
+
+<div class="container-fluid">
+  <div class="col-md-8 offset-md-2 pt-5">
+    <mat-tab-group (selectedTabChange)="ontabChange($event)">
+      <mat-tab label="Add Project">
+        <app-add-project (searchManagerEvent)="getUsers('project')" [events]="eventsProjectSubject.asObservable()"></app-add-project>
+      </mat-tab>
+      <mat-tab label="Add Task">
+        <app-add-task (searchManagerEventOnTask)="getUsers('task')" (searchProjectEventOnTask)="getProjects('projectsPage')" (searchParentTask)="getParentTask($event)"></app-add-task>
+      </mat-tab>
+      <mat-tab label="Add User">
+        <app-add-user [events]="eventsSubject.asObservable()"></app-add-user>
+      </mat-tab>
+      <mat-tab label="View Task">
+        <app-view-tasks (searchProjectEventOnTask)="getProjects('ViewTaskPage')"></app-view-tasks>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
