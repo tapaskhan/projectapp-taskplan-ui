@@ -1,15 +1,15 @@
 <mat-toolbar>
-  <span>My Application</span>
+  <span>Project Manager Application</span>
 </mat-toolbar>
 
-<div class="container-fluid">
-  <div class="col-md-8 offset-md-2 pt-5">
+<div class="container-fluid row">
+  <div class="col-12 col-md-10 offset-md-1 pt-5">
     <mat-tab-group (selectedTabChange)="ontabChange($event)">
       <mat-tab label="Add Project">
         <app-add-project (searchManagerEvent)="getUsers('project')" [events]="eventsProjectSubject.asObservable()"></app-add-project>
       </mat-tab>
       <mat-tab label="Add Task">
-        <app-add-task (searchManagerEventOnTask)="getUsers('task')" (searchProjectEventOnTask)="getProjects('projectsPage')" (searchParentTask)="getParentTask($event)"></app-add-task>
+        <app-add-task (searchManagerEventOnTask)="getUsersOnTask('task')" (searchProjectEventOnTask)="getProjects('projectsPage')" (searchParentTask)="getParentTask($event)"></app-add-task>
       </mat-tab>
       <mat-tab label="Add User">
         <app-add-user [events]="eventsSubject.asObservable()"></app-add-user>

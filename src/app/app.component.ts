@@ -24,11 +24,13 @@ export class AppComponent implements OnInit {
   users: Users[] = [];
   projects = [];
   parentTask = [];
+
   constructor(private commonservice: CommonService, private dialog: MatDialog) {
   }
 
   ontabChange(evt) {
     console.log(evt.index);
+
     switch(evt.index) {
       case 0:
         console.log('asdas asdas');
@@ -40,6 +42,9 @@ export class AppComponent implements OnInit {
         break;
       case 2:
         this.eventsSubject.next();
+        break;
+      case 3:
+        this.commonservice.filterClearTask('clear');
         break;
     }
   }
@@ -59,6 +64,24 @@ export class AppComponent implements OnInit {
   }
 
   onCompleteGetUsers(response, type) {
+    console.log(response);
+    this.users = response;
+    setTimeout(() => {
+      const dataTosend = {
+        'typeOfSearch': 'Search Manager',
+        'dataToPopulate': this.users,
+        'searchType': type
+      }
+      this.openDialog(dataTosend);
+    }, 0);
+  }
+
+  getUsersOnTask(type) {
+    // tslint:disable-next-line:max-line-length
+    this.commonservice.getHttpCall({url: 'taskusers'}).then(result => this.onCompletegetUsersOnTask(result,type));
+  }
+
+  onCompletegetUsersOnTask(response, type) {
     console.log(response);
     this.users = response;
     setTimeout(() => {

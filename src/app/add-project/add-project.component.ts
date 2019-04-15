@@ -33,7 +33,7 @@ export class AddProjectComponent implements OnInit {
   inEditMode = false;
   private uploadSuccess: EventEmitter<boolean> = new EventEmitter();
   private eventsSubscription: any;
-  selectedProjectID:any;
+  selectedProjectID: any;
   @Input() events: Observable<void>;
 
 
@@ -136,7 +136,7 @@ export class AddProjectComponent implements OnInit {
     else {
       this.updateProject(tempObj);
     }
-    
+
 
   }
 
@@ -157,8 +157,9 @@ export class AddProjectComponent implements OnInit {
 
   editProject(objToedit) {
     window.scrollTo(0,0);
-	this.selectedProjectID=objToedit['id'];
+    console.log(objToedit);
     this.inEditMode = true;
+    this.selectedProjectID = objToedit['id'];
     this.registerForm.controls['projectName'].patchValue(objToedit['projectDesc']);
     this.registerForm.controls['priority'].patchValue(objToedit['priority']);
     if (objToedit['user'] != null) {
@@ -169,7 +170,7 @@ export class AddProjectComponent implements OnInit {
       this.registerForm.controls['checkme'].patchValue(true);
       console.log(this.registerForm.controls['timeValid']);
       this.minDate = _moment(objToedit['startDate'], 'YYYY-MM-DD').toDate();
-      this.nextDate = _moment(objToedit['endDate'], 'YYYY-MM-DD').toDate();
+      this.nextDate = _moment(objToedit['startDate'], 'YYYY-MM-DD').add(1,'days').toDate();
       this.registerForm.controls['timeValid']['controls']['fromTime'].patchValue(_moment(objToedit['startDate'], 'YYYY-MM-DD').toDate());
       this.registerForm.controls['timeValid']['controls']['toTime'].patchValue(_moment(objToedit['endDate'], 'YYYY-MM-DD').toDate());
     }
@@ -181,7 +182,7 @@ export class AddProjectComponent implements OnInit {
 
   updateProject(datatoSend) {
     // tslint:disable-next-line:max-line-length
-    this.commonservice.putHttpCall({url: `project/${this.selectedManager['id']}`, data: datatoSend}).then(result => this.onCompleteupdateProject(result));
+    this.commonservice.putHttpCall({url: `project/${this.selectedProjectID}`, data: datatoSend}).then(result => this.onCompleteupdateProject(result));
   }
 
   onCompleteupdateProject(response) {
@@ -193,7 +194,7 @@ export class AddProjectComponent implements OnInit {
 
   resetForm() {
     this.submitted = false;
-	this.selectedProjectID="";
+    this.selectedProjectID = '';
     this.form.resetForm();
     this.inEditMode = false;
     this.selectedManager = null;

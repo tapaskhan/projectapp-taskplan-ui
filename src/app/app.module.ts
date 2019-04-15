@@ -12,6 +12,7 @@ import { CommonService } from './commonservice';
 import { Globalconstant } from './global_constant';
 import { TokenInterceptor } from './token.interceptor';
 import { AddUserComponent } from './add-user/add-user.component';
+import { ViewUserComponent } from './add-user/view-user/view-user.component';
 import { AddProjectComponent } from './add-project/add-project.component';
 import { ViewProjectsComponent } from './add-project/view-projects/view-projects.component';
 import { AddTaskComponent } from './add-task/add-task.component';
@@ -22,6 +23,7 @@ import { CourseDialogComponent } from './course-dialog/course-dialog.component';
   declarations: [
     AppComponent,
     AddUserComponent,
+    ViewUserComponent,
     AddProjectComponent,
     ViewProjectsComponent,
     AddTaskComponent,

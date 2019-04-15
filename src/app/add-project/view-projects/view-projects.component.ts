@@ -46,7 +46,7 @@ export class ViewProjectsComponent implements OnInit {
    * getProjects
   */
  getProjects() {
-  this.commonservice.getObservable({url: 'projects'})
+  this.commonservice.getObservable({url: 'allprojects'})
     .subscribe(
     res => {
       this.dataSource = new MatTableDataSource();
@@ -72,8 +72,22 @@ export class ViewProjectsComponent implements OnInit {
     this.editProjectEvent.emit(totalRowInfo);
   }
 
-  deleteProject(totalRowInfo) {
+  suspendProject(totalRowInfo) {
+    const tempActiveStatus = !totalRowInfo['inactive'];
+    // tslint:disable-next-line:max-line-length
+    this.commonservice.putHttpCall({'data': {'inactive': tempActiveStatus}, 'url': `project/${totalRowInfo['id']}/status`}).then((response) => this.onSuspendProject(tempActiveStatus));
+  }
 
+  onSuspendProject(activeStatus) {
+    let statusmsg: any;
+    if (activeStatus) {
+      statusmsg = 'Project Suspended';
+    }
+    else {
+      statusmsg = 'Project Active';
+    }
+    this.commonservice.openSnackBar(`${statusmsg}`, 'Dismiss');
+    this.getProjects();
   }
 
 }

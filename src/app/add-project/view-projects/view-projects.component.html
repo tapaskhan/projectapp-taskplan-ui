@@ -9,61 +9,62 @@
 </div>
 
 <div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource" matSort>
+  <mat-table [dataSource]="dataSource" matSort>
 
     <!-- ID Column -->
     <ng-container matColumnDef="projectDesc">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-      <td mat-cell *matCellDef="let row"> {{row.projectDesc}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+      <mat-cell *matCellDef="let row" data-label="Name"> {{row.projectDesc}} </mat-cell>
     </ng-container>
 
     <!-- Progress Column -->
     <ng-container matColumnDef="taskCount">
-      <th mat-header-cell *matHeaderCellDef> No. Of Tasks </th>
-      <td mat-cell *matCellDef="let row"> {{row.taskCount}}% </td>
+      <mat-header-cell *matHeaderCellDef> No. Of Tasks </mat-header-cell>
+      <mat-cell *matCellDef="let row" data-label="No. Of Tasks"> {{row.taskCount}} </mat-cell>
     </ng-container>
 
     <!-- Name Column -->
     <ng-container matColumnDef="taskCompleted">
-      <th mat-header-cell *matHeaderCellDef> Tasks Completed </th>
-      <td mat-cell *matCellDef="let row"> {{row.taskCompleted}} </td>
+      <mat-header-cell *matHeaderCellDef> Tasks Completed </mat-header-cell>
+      <mat-cell *matCellDef="let row" data-label="Tasks Completed"> {{row.taskCompleted}} </mat-cell>
     </ng-container>
 
     <!-- Color Column -->
     <ng-container matColumnDef="startDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </th>
-      <td mat-cell *matCellDef="let row"> {{row.startDate}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Start Date </mat-header-cell>
+      <mat-cell *matCellDef="let row" data-label="Start Date"> {{row.startDate}} </mat-cell>
     </ng-container>
 
     <!-- Color Column -->
     <ng-container matColumnDef="endDate">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> End Date </th>
-      <td mat-cell *matCellDef="let row"> {{row.endDate}} </td>
+      <mat-header-cell *matHeaderCellDef mat-sort-header> End Date </mat-header-cell>
+      <mat-cell *matCellDef="let row" data-label="End Date"> {{row.endDate}} </mat-cell>
     </ng-container>
 
     <!-- Color Column -->
     <ng-container matColumnDef="priority">
-      <th mat-header-cell *matHeaderCellDef> Priority </th>
-      <td mat-cell *matCellDef="let row"> {{row.priority}} </td>
+      <mat-header-cell *matHeaderCellDef> Priority </mat-header-cell>
+      <mat-cell *matCellDef="let row" data-label="Priority"> {{row.priority}} </mat-cell>
     </ng-container>
 
     <!-- Color Column -->
     <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
-      <td mat-cell *matCellDef="let row">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Actions </mat-header-cell>
+      <mat-cell *matCellDef="let row" data-label="Actions">
         <button mat-icon-button (click)="editProject(row)">
           <i class="fas fa-edit"></i>
         </button>
-        <button mat-icon-button (click)="deleteProject(row)">
-          <i class="fas fa-trash-alt"></i>
+        <button mat-raised-button color="accent" (click)="suspendProject(row)">
+          <ng-container *ngIf="!row['inactive']">Suspend</ng-container>
+          <ng-container *ngIf="row['inactive']">Unsuspend</ng-container>
         </button>
-      </td>
+      </mat-cell>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-    </tr>
-  </table>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
 
   <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator> -->
 </div>

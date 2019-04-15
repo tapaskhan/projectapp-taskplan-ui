@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, OnDestroy, EventEmitter } from '@angular/core';
 import * as $ from 'jquery';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonService } from './../commonservice';
@@ -28,6 +28,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   sortedData: Users[];
   inEditMode = false;
   selectedUserId: any = null;
+  uploadSuccess: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private commonservice: CommonService, private formBuilder: FormBuilder) {
 
@@ -35,7 +36,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.createAddUserForm();
-    this.eventsSubscription = this.events.subscribe(() => this.getUsers());
+    this.eventsSubscription = this.events.subscribe(() => this.uploadSuccess.emit(true));
   }
 
   ngOnDestroy() {
@@ -97,7 +98,7 @@ export class AddUserComponent implements OnInit, OnDestroy {
   onCompleteupdateUser(response) {
     // console.log(response);
     this.commonservice.openSnackBar('User Updated', 'Dismiss');
-    this.getUsers();
+    this.uploadSuccess.emit(true);
   }
 
   /**
@@ -110,32 +111,33 @@ export class AddUserComponent implements OnInit, OnDestroy {
 
   onCompleteCreateUser(response) {
     this.commonservice.openSnackBar('New User Created', 'Dismiss');
-    this.getUsers();
+    this.uploadSuccess.emit(true);
+    //this.getUsers();
   }
 
   /**
    * createUser
   */
-  getUsers() {
-    // tslint:disable-next-line:max-line-length
-    this.commonservice.getHttpCall({url: 'users'}).then(result => this.onCompleteGetUsers(result));
-  }
+  // getUsers() {
+  //   // tslint:disable-next-line:max-line-length
+  //   this.commonservice.getHttpCall({url: 'users'}).then(result => this.onCompleteGetUsers(result));
+  // }
 
-  onCompleteGetUsers(response) {
-    console.log(response);
-    this.users = response;
-    setTimeout(() => {
-      this.sortedData = this.users.slice();
-    }, 0);
-  }
+  // onCompleteGetUsers(response) {
+  //   console.log(response);
+  //   this.users = response;
+  //   setTimeout(() => {
+  //     this.sortedData = this.users.slice();
+  //   }, 0);
+  // }
 
-  editUser(index) {
+  editUser(totalInfo) {
     window.scrollTo(0, 0);
     this.inEditMode = true;
-    this.selectedUserId = this.sortedData[index]['id'];
-    const firstName = this.sortedData[index]['firstName'];
-    const lastName = this.sortedData[index]['lastName'];
-    const employeeId = this.sortedData[index]['employeeId'];
+    this.selectedUserId = totalInfo['id'];
+    const firstName = totalInfo['firstName'];
+    const lastName = totalInfo['lastName'];
+    const employeeId = totalInfo['employeeId'];
     this.addUserForm.controls['firstName'].patchValue(firstName);
     this.addUserForm.controls['lastName'].patchValue(lastName);
     this.addUserForm.controls['empid'].patchValue(employeeId);

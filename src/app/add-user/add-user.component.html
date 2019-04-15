@@ -41,7 +41,8 @@
   </form>
   <hr>
   <div class="col-12 pt-5">
-    <table matSort (matSortChange)="sortData($event)">
+    <app-view-user [uploadSuccess] = "uploadSuccess" (editUserEvent)="editUser($event)" [detectInEditMode]="inEditMode"></app-view-user>
+    <!-- <table matSort (matSortChange)="sortData($event)">
       <tr>
         <th mat-sort-header="firstName">First Name</th>
         <th mat-sort-header="lastName">Last Name</th>
@@ -59,5 +60,5 @@
           </button>
         </td>
       </tr>
-    </table>
+    </table> -->
   </div>

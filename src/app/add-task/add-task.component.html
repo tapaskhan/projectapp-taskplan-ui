@@ -1,7 +1,7 @@
 <form class="example-form" [formGroup]="addTaskForm" (ngSubmit)="onSubmit()" #form="ngForm">
     <div class="col-12">
         <div class="row align-items-center">
-          <div class="col-9">
+          <div class="col-12 col-md-9">
             <mat-form-field appearance="outline">
               <mat-label>Project</mat-label>
               <input matInput placeholder="Project" formControlName="project" readonly>
@@ -11,12 +11,12 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="col-3">
-            <button type="button" mat-raised-button color="accent" (click)="searchProject()">Search</button>
+          <div class="col-12 col-md-3">
+            <button type="button" class="float-right" mat-raised-button color="accent" (click)="searchProject()" [disabled]="inEditMode">Search</button>
           </div>
         </div>
     </div>
-    <div class="col-12">
+    <div class="col-12  mt-3 mt-md-0">
       <mat-form-field appearance="outline">
         <mat-label>Task</mat-label>
         <input matInput placeholder="Task" formControlName="task">
@@ -26,8 +26,9 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div class="col-12">
-        <mat-checkbox formControlName="checkme">Parent Task</mat-checkbox>
+    <div class="col-12 posn_rel">
+        <div class="overlay" *ngIf="inEditMode"></div>
+        <mat-checkbox formControlName="checkme" [ngClass]="{'noCLick':inEditMode}">Parent Task</mat-checkbox>
     </div>
     <div class="col-12">
         <mat-slider
@@ -41,7 +42,7 @@
     </div>
     <div class="col-12">
         <div class="row align-items-center">
-          <div class="col-7">
+          <div class="col-12 col-md-7">
             <mat-form-field appearance="outline">
               <mat-label>Parent Task</mat-label>
               <input matInput placeholder="Parent Task" formControlName="parentTask" readonly>
@@ -51,15 +52,15 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="col-5">
-            <button class="mr-2" type="button" mat-raised-button color="accent" [disabled]="checkIfToDisable || ((selectedProject | json) =='{}')" (click)="searchTask()">Search</button>
-            <button type="button" mat-raised-button color="accent" [disabled]="checkIfToDisable || ((selectedParentTask | json) === '{}')" (click)="clearTask()">Clear Task</button>
+          <div class="col-12 col-md-5">
+            <button type="button" mat-raised-button color="accent" [disabled]="checkIfToDisable || ((selectedParentTask | json) === '{}' || selectedParentTask == null)" (click)="clearTask()" class="float-right">Clear Task</button>
+            <button type="button" mat-raised-button color="accent" [disabled]="checkIfToDisable || ((selectedProject | json) =='{}')" (click)="searchTask()" class="float-right mr-2">Search</button>
           </div>
         </div>
     </div>
-    <div class="col-8" formGroupName="timeValid">
+    <div class="col-12 col-md-8  mt-3 mt-md-0" formGroupName="timeValid">
       <div class="row">
-        <div class="col-6">
+        <div class="col-12 col-md-6">
           <mat-form-field appearance="outline" [ngClass]="{'ng-invalid mat-form-field-invalid':((submitted && timeValidRef.errors?.myValidator) || (submitted && timeValidRef.errors?.empty))}">
             <mat-label>From Time</mat-label>
             <input matInput [min]="minDate" [matDatepicker]="pickerFromTime" placeholder="Choose a date" formControlName="fromTime" >
@@ -70,7 +71,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-6">
+        <div class="col-12 col-md-6">
           <mat-form-field appearance="outline" [ngClass]="{'ng-invalid mat-form-field-invalid':((submitted && timeValidRef.errors?.myValidator) || (submitted && timeValidRef.errors?.empty))}">
             <mat-label>To Time</mat-label>
             <input matInput [min]="nextDate" [matDatepicker]="pickerToTime" placeholder="Choose a date" formControlName="toTime">
@@ -92,23 +93,25 @@
     </div>
     <div class="col-12">
         <div class="row align-items-center">
-          <div class="col-9">
+          <div class="col-12 col-md-9">
             <mat-form-field appearance="outline">
               <mat-label>User</mat-label>
               <input matInput placeholder="User" formControlName="user" readonly>
               <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
               <mat-error *ngIf="submitted && f.user?.errors?.required">
-                Please Select Manager from Search Manager Screen
+                Please Select User
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="col-3">
-            <button type="button" mat-raised-button color="accent" (click)="searchManager()" [disabled]="checkIfToDisable">Search</button>
+          <div class="col-12 col-md-3">
+            <button type="button" mat-raised-button color="accent" class="float-right" (click)="searchManager()" [disabled]="checkIfToDisable">Search</button>
           </div>
         </div>
     </div>
-    <div class="col-12">
-      <button mat-raised-button color="primary">Submit</button>
+    <div class="col-12 mt-3 mt-md-0">
+      <button mat-raised-button color="primary">
+        <ng-container *ngIf="!inEditMode">Submit</ng-container><ng-container *ngIf="inEditMode">Update</ng-container>
+      </button>
       <button type="button" mat-raised-button color="secondary" (click)="resetForm()">Reset</button>
     </div>
 </form>

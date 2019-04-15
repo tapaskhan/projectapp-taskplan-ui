@@ -154,21 +154,32 @@ export class AddTaskComponent implements OnInit {
   }
 
   editTask() {
+    const fromTimeControl = this.addTaskForm.get('timeValid').get('fromTime');
+    const toTimeControl = this.addTaskForm.get('timeValid').get('toTime');
+    console.log(this.toEditTask);
     this.selectedProject = this.toEditTask['project'];
     this.addTaskForm.controls['project'].patchValue(this.toEditTask['project']['projectDesc']);
     this.addTaskForm.controls['checkme'].patchValue(this.toEditTask['isParentTask']);
     if(this.toEditTask['isParentTask']){
+      console.log(this.toEditTask['parentTaskDetails']['parentTaskDec']);
       this.addTaskForm.controls['task'].patchValue(this.toEditTask['parentTaskDetails']['parentTaskDec']);
+      fromTimeControl.patchValue(null);
+      toTimeControl.patchValue(null);
     }
     else {
       this.addTaskForm.controls['task'].patchValue(this.toEditTask['taskDesc']);
-      this.selectedParentTask = this.toEditTask['parentTaskDetails'];
+      this.selectedParentTask = this.toEditTask['parentTaskDetails'] || null;
+      console.log(this.selectedParentTask);
       this.selectedManager = this.toEditTask['user'];
-      this.addTaskForm.controls['parentTask'].patchValue(this.toEditTask['parentTaskDetails']['parentTaskDec']);
+      if (this.toEditTask['parentTaskDetails']) {
+        this.addTaskForm.controls['parentTask'].patchValue(this.toEditTask['parentTaskDetails']['parentTaskDec']);
+      }
       this.addTaskForm.controls['priority'].patchValue(this.toEditTask['priority']);
-      this.addTaskForm.controls['user'].patchValue(`${this.toEditTask['user']['firstName']} ${this.toEditTask['user']['lastName']}`);
+      if (this.toEditTask['user']) {
+        this.addTaskForm.controls['user'].patchValue(`${this.toEditTask['user']['firstName']} ${this.toEditTask['user']['lastName']}`);
+      }
       this.minDate = _moment(this.toEditTask['startDate'], 'YYYY-MM-DD').toDate();
-      this.nextDate = _moment(this.toEditTask['endDate'], 'YYYY-MM-DD').toDate();
+      // this.nextDate = _moment(this.toEditTask['startDate'], 'YYYY-MM-DD').add(1, 'days').toDate();
       // tslint:disable-next-line:max-line-length
       this.addTaskForm.controls['timeValid']['controls']['fromTime'].patchValue(_moment(this.toEditTask['startDate'], 'YYYY-MM-DD').toDate());
       this.addTaskForm.controls['timeValid']['controls']['toTime'].patchValue(_moment(this.toEditTask['endDate'], 'YYYY-MM-DD').toDate());
@@ -192,60 +203,64 @@ export class AddTaskComponent implements OnInit {
       fromtime = null;
       toTime = null;
     }
-    if(!this.inEditMode) {
-      if (this.addTaskForm.get('checkme')['value']) {
-        tempObj = {
-          'taskDesc': null,
-          'startDate': fromtime,
-          'endDate': toTime,
-          'isParentTask': this.addTaskForm.get('checkme')['value'],
-          'priority': this.addTaskForm.get('priority')['value'],
-          'status': 'PENDING',
-          'project': {
-            'id': this.selectedProject['id']
-          },
-          'parentTaskDetails': {
-            'parentTaskDec': this.addTaskForm.get('task')['value']
-          },
-        };
+    if (this.addTaskForm.get('checkme')['value']) {
+      tempObj = {
+        'taskDesc': null,
+        'startDate': fromtime,
+        'endDate': toTime,
+        'isParentTask': this.addTaskForm.get('checkme')['value'],
+        'priority': this.addTaskForm.get('priority')['value'],
+        'status': 'PENDING',
+        'project': this.selectedProject,
+        'parentTaskDetails': {
+          'parentTaskDec': this.addTaskForm.get('task')['value']
+        },
+      };
 
-      }
-      else {
-        tempObj = {
-          'taskDesc': this.addTaskForm.get('task')['value'],
-          'startDate': fromtime,
-          'endDate': toTime,
-          'isParentTask': this.addTaskForm.get('checkme')['value'],
-          'priority': this.addTaskForm.get('priority')['value'],
-          'status': 'PENDING',
-          'project': {
-            'id': this.selectedProject['id']
-          },
-          'parentTaskDetails': {
-            'id': this.selectedParentTask['id'],
-            'parentTaskDec': this.selectedParentTask['parentTaskDec']
-          },
-          'user': {
-            'id': this.selectedManager['id']
-          }
-        };
-      }
-      console.log(tempObj);
-      this.addTask(tempObj);
     }
     else {
       tempObj = {
-        'id': this.toEditTask['id'],
         'taskDesc': this.addTaskForm.get('task')['value'],
         'startDate': fromtime,
         'endDate': toTime,
         'isParentTask': this.addTaskForm.get('checkme')['value'],
         'priority': this.addTaskForm.get('priority')['value'],
-        'status': 'COMPLETE',
+        'status': 'PENDING',
         'project': this.selectedProject,
         'parentTaskDetails': (JSON.stringify(this.selectedParentTask) === '{}') ? null : this.selectedParentTask,
-        'user': this.selectedManager
+        'user': (JSON.stringify(this.selectedManager) === '{}') ? null : this.selectedManager
+      };
+    }
+    if (!this.inEditMode) {
+      console.log(tempObj);
+      this.addTask(tempObj);
+    }
+    else {
+      if (this.addTaskForm.get('checkme')['value']) {
+        tempObj['parentTaskDetails']['id'] = this.toEditTask['parentTaskDetails']['id'];
       }
+      else {
+        if (JSON.stringify(this.selectedParentTask) === '{}' && this.toEditTask['parentTaskDetails'] === null) {
+          tempObj['parentTaskDetails'] = null;
+        }
+        else {
+          // tslint:disable-next-line:max-line-length
+          tempObj['parentTaskDetails'] = (JSON.stringify(this.selectedParentTask) === '{}') ? null : this.selectedParentTask;
+        }
+      }
+
+      // tempObj = {
+      //   'id': this.toEditTask['id'],
+      //   'taskDesc': this.addTaskForm.get('task')['value'],
+      //   'startDate': fromtime,
+      //   'endDate': toTime,
+      //   'isParentTask': this.addTaskForm.get('checkme')['value'],
+      //   'priority': this.addTaskForm.get('priority')['value'],
+      //   'status': 'PENDING',
+      //   'project': this.selectedProject,
+      //   'parentTaskDetails': (JSON.stringify(this.selectedParentTask) === '{}') ? null : this.selectedParentTask,
+      //   'user': this.selectedManager
+      // }
       this.updateTask(tempObj);
     }
   }
@@ -255,7 +270,7 @@ export class AddTaskComponent implements OnInit {
   }
 
   onCompleteAddTask(response) {
-    this.commonservice.openSnackBar('New Parent Task Created', 'Dismiss');
+    this.commonservice.openSnackBar('New Task Created', 'Dismiss');
     this.resetForm();
   }
 

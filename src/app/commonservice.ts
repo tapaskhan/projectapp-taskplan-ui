@@ -31,7 +31,6 @@ export class CommonService {
               public myGlobals: Globalconstant,
               public snackBar: MatSnackBar
             ) {
-				
 
   }
 
@@ -41,6 +40,7 @@ export class CommonService {
   private _searchUserlistnersInAddTask = new Subject<any>();
   private _searchParentTask = new Subject<any>();
   private _listenerEditTask = new Subject<any>();
+  private _clearTask = new Subject<any>();
 
   listen(): Observable<any> {
     return this._listners.asObservable();
@@ -59,6 +59,9 @@ export class CommonService {
   }
   listenEditTask(): Observable<any> {
     return this._listenerEditTask.asObservable();
+  }
+  listenClearTask(): Observable<any> {
+    return this._clearTask.asObservable();
   }
 
   filter(filterBy: string) {
@@ -79,6 +82,9 @@ export class CommonService {
   filterEditTask(filterBy: string) {
     this._listenerEditTask.next(filterBy);
   }
+  filterClearTask(filterBy: string) {
+    this._clearTask.next(filterBy);
+  }
 
   responsefunction(res: any): void {
     try {
@@ -98,7 +104,7 @@ export class CommonService {
 
     console.log(senddata.data);
     return this.http
-      .post(this.baseUrl+'/projectapp/' + senddata.url, senddata.data, {headers: this.headers})
+      .post(this.baseUrl + senddata.url, senddata.data, {headers: this.headers})
       .toPromise()
       .then(res => {
          $('.total_loader').hide();
@@ -110,13 +116,13 @@ export class CommonService {
   putHttpCall(senddata: any, smallloader= false) {
     if (($('.total_loader').css('display') === 'block' || $('.total_loader').css('display') !== 'inline-block') && !smallloader) {
       $('.total_loader').show();
-   }
+    }
 
     this.headers = new HttpHeaders({'Content-Type': 'application/json', 'Cache-Control': 'no-cache'});
 
     console.log(senddata.data);
     return this.http
-      .put(this.baseUrl+'/projectapp/' + senddata.url, senddata.data, {headers: this.headers})
+      .put(this.baseUrl + senddata.url, senddata.data, {headers: this.headers})
       .toPromise()
       .then(res => {
         $('.total_loader').hide();
@@ -126,8 +132,25 @@ export class CommonService {
   }
 
   getHttpCall(senddata: any) {
+    if (($('.total_loader').css('display') === 'block' || $('.total_loader').css('display') !== 'inline-block')) {
+      $('.total_loader').show();
+    }
     return this.http
-    .get(this.baseUrl+'/projectapp/' + senddata.url)
+    .get(this.baseUrl + senddata.url)
+    .toPromise()
+    .then(res => {
+      $('.total_loader').hide();
+      return res;
+    })
+    .catch(this.handleError);
+  }
+
+  deleteHttpCall(senddata: any) {
+    if (($('.total_loader').css('display') === 'block' || $('.total_loader').css('display') !== 'inline-block')) {
+      $('.total_loader').show();
+    }
+    return this.http
+    .delete(this.baseUrl+'user/' + senddata.url)
     .toPromise()
     .then(res => {
       $('.total_loader').hide();
@@ -149,7 +172,7 @@ export class CommonService {
   }
 
   getObservable(senddata: any): Observable<any> {
-    return this.http.get<any>(this.baseUrl+'/projectapp/' + senddata.url);
+    return this.http.get<any>(this.baseUrl + senddata.url);
   }
 
 

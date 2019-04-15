@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: `${window.location.protocol}//${window.location.hostname}:8090`
+  baseUrl: `${window.location.protocol}//${window.location.hostname}:8090/projectapp/`
 };
 
 /*
